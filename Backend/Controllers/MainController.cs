@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Domain.Entities;
+using Backend.Persistence.Repository.Implementation;
+using Backend.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers
@@ -10,36 +12,41 @@ namespace Backend.Controllers
     [Route("api/[controller]")]
     public class MainController : Controller
     {
-        // GET api/values
+        PatientManager patientManager;
+
+        public MainController()
+        {
+            patientManager = new PatientManager();
+            patientManager.patientRepository = new PatientRepository();
+        }
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Patient> Get()
         {
-            return new string[] { "value1", "value2" };
+            return patientManager.getAllPatients();
         }
 
-        // GET api/values/5
         [HttpGet("{documentNumber}")]
-        public string Get(int documentNumber)
+        public Patient Get(string documentNumber)
         {
-            return "value";
+            return patientManager.getPatientByDocumentNumber(documentNumber);
         }
 
-        // POST api/values
         [HttpPost]
         public void Post([FromBody]Patient patient)
         {
+            patientManager.addPatient(patient);
         }
 
-        // PUT api/values/5
         [HttpPut("{documentNumber}")]
         public void Put(int documentNumber, [FromBody]Patient patient)
         {
+            patientManager.updatePatient(patient);
         }
 
-        // DELETE api/values/5
         [HttpDelete("{documentNumber}")]
-        public void Delete(int documentNumber)
+        public void Delete(string documentNumber)
         {
+            patientManager.deletePatient(documentNumber);
         }
     }
 }

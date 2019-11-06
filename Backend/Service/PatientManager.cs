@@ -32,7 +32,7 @@ namespace Backend.Service
             patientRepository.Add(patient);
         }
 
-        public void updatePatient(string documentNumber, Patient patient)
+        public void updatePatient(Patient patient)
         {
             patientRepository.Edit(patient);
         }
