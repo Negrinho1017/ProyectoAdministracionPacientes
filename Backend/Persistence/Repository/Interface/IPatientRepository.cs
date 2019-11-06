@@ -5,7 +5,12 @@ using System.Threading.Tasks;
 
 namespace Backend.Persistence.Repository.Interface
 {
-    interface IPatientRepository
+    interface IPatientRepository<T>
     {
+        T GetById(string id);
+        IEnumerable<T> List();
+        void Add(T entity);
+        void Delete(string id);
+        void Edit(T entity);
     }
 }
