@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Backend.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers
@@ -17,27 +18,27 @@ namespace Backend.Controllers
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{documentNumber}")]
+        public string Get(int documentNumber)
         {
             return "value";
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody]Patient patient)
         {
         }
 
         // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        [HttpPut("{documentNumber}")]
+        public void Put(int documentNumber, [FromBody]Patient patient)
         {
         }
 
         // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{documentNumber}")]
+        public void Delete(int documentNumber)
         {
         }
     }
