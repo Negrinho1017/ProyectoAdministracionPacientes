@@ -48,6 +48,8 @@ namespace Backend
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(MyAllowSpecificOrigins);
+
             app.UseMvc();
         }
     }

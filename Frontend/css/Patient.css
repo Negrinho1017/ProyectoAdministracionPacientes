@@ -1,0 +1,17 @@
+﻿.panel{
+    margin: 2em;
+}
+
+.modal-header {
+    border-bottom: 0 none;
+}
+
+.modal-footer {
+    border-top: 0 none;
+}
+
+.required {
+    border-width: 1px;
+    border-style: solid;
+    border-color: coral;
+}
