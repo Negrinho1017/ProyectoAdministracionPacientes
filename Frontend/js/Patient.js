@@ -13,16 +13,14 @@ var emptyPatient = {
 
 var fields = ["name", "lastname", "documentType", "documentNumber", "phoneNumber", "birthdate"];
 
-$(document).on('click', '.cancel', function () {
-    for (var fieldIndex in fields) {
-        field = fields[fieldIndex];
-        $(`#${field}`).removeClass("required");
-    }
-});
-
 var KO = function () {
+    console.log(httpGet());
+    this.countries = ko.mapping.fromJS(country_arr);
+    this.cities = ko.mapping.fromJS([]);
+    this.documentTypes = ko.mapping.fromJS(["CC", "CE", "TI"]);
     this.patient = ko.mapping.fromJS(emptyPatient);
     this.edit = ko.mapping.fromJS(false);
+    this.countrySelected = ko.mapping.fromJS(false);
     var self = this
 
     $("#gridContainer").on("click", ".delete", function () {
@@ -35,12 +33,49 @@ var KO = function () {
         self.getPatient(id);
     });
 
+    $("select").select2({
+        placeholder: "Select...",
+        theme: "bootstrap",
+        "language": {
+            "noResults": function () {
+                return "No records found"
+            }
+        },
+    });
+
+    $('#country').change(function () {
+        var citiesIndex = (country_arr.indexOf(($(this).val())));
+        self.getCities(s_a[citiesIndex + 1].split("|"), citiesIndex);
+    });
+
+    $('#city').change(function () {
+        var city = $(this).val();
+        self.assignCity(city);
+    });
+
+    $('#documentType').change(function () {
+        var documentType = $(this).val();
+        self.assignDocumentType(documentType);
+    });
+
+    this.cancel = function () {
+        this.edit = ko.mapping.fromJS(false, this.edit);
+        this.patient = ko.mapping.fromJS(emptyPatient, this.patient);
+        for (var fieldIndex in fields) {
+            field = fields[fieldIndex];
+            $(`#${field}`).removeClass("required");
+        }
+        $('#patientForm').modal('hide');
+    }
+
     this.createPatient = function () {
+        console.log(ko.toJSON(this.patient.country));
         if (self.validFields()) {
             const newPatient = JSON.parse(ko.toJSON(this.patient))
             httpPost(newPatient);
             this.patient = ko.mapping.fromJS(emptyPatient, this.patient);
             $('#patientForm').modal('hide');
+            successMessage("Patient created!!");
             patients = httpGet();
             getPatients();
         } else {
@@ -48,10 +83,11 @@ var KO = function () {
         }
     }
 
-    this.updatePatient = function () {       
+    this.updatePatient = function () {
         if (self.validFields()) {
             const updatedPatient = JSON.parse(ko.toJSON(this.patient));
             httpPut(this.documentNumber, updatedPatient);
+            successMessage("Patient updated!!");
             patients = httpGet();
             getPatients();
             this.edit = ko.mapping.fromJS(false, this.edit);
@@ -62,10 +98,18 @@ var KO = function () {
         }
     }
 
+    self.assignCity = function (city) {
+        this.patient.city = city;
+    }
+
+    self.assignDocumentType = function (documentType) {
+        this.patient.documentType = documentType;
+    }
+
     self.validFields = function () {
         var allFieldsFilled = true;
         for (var fieldIndex in fields) {
-            field = fields[fieldIndex]
+            field = fields[fieldIndex];
             element = document.getElementById(fields[fieldIndex]).value;
             if (element === "") {
                 $(`#${field}`).addClass("required");
@@ -77,16 +121,34 @@ var KO = function () {
         return allFieldsFilled;
     }
 
+    self.getCities = function (cities, country) {
+        this.patient.country = country_arr[country];
+        this.countrySelected = ko.mapping.fromJS(true, this.countrySelected);
+        this.cities = ko.mapping.fromJS(cities, this.cities);
+    }
+
     self.delete = function (data) {
-        httpDelete(data);
-        patients = httpGet();
-        getPatients();
+        acceptCancelMessage("You won't be able to revert the changes!")
+        .then((result) => {
+            if (result.value) {
+                httpDelete(data);
+                patients = httpGet();
+                getPatients();
+                successMessage('Patient deleted');
+            }
+        });
     }
 
     self.getPatient = function (documentNumber) {
         this.edit = ko.mapping.fromJS(true, this.edit);
         this.documentNumber = httpGetById(documentNumber).documentNumber;
-        this.patient = ko.mapping.fromJS(httpGetById(documentNumber), this.patient);
+        gottenPatient = httpGetById(documentNumber);
+        gottenPatient.birthdate = self.parseDate(gottenPatient.birthdate);
+        this.patient = ko.mapping.fromJS(gottenPatient, this.patient);
+    }
+
+    self.parseDate = function (date) {
+        return date.split("T")[0];
     }
 
     $(function () {
