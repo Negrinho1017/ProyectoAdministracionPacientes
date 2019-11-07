@@ -33,7 +33,7 @@ var KO = function () {
         self.getPatient(id);
     });
 
-    $("select").select2({
+    $(".modified-select").select2({
         placeholder: "Select...",
         theme: "bootstrap",
         "language": {
@@ -208,8 +208,12 @@ var KO = function () {
                 caption: "E-mail",
             },
             {
-                dataField: "birthdate",
                 caption: "Birthdate",
+                cellTemplate: function (container, options) {
+                    container.addClass("chart-cell");
+                    var birthdate = self.parseDate(options.data.birthdate);
+                    container.append(birthdate);
+                }
             },
             {
                 dataField: "country",

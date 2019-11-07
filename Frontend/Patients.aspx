@@ -44,7 +44,7 @@
                         </div>       
                         <div class="form-group col-md-12">
                             <label for="documentType">* Document type:</label><br />
-                            <select class="form-control" data-bind="options: documentTypes, value: patient.documentType" id="documentType" name="state"></select>
+                            <select class="form-control normal-select" data-bind="options: documentTypes, value: patient.documentType" id="documentType" name="state"></select>
                         </div>
                         <div class="form-group col-md-12">
                             <label for="documentNumber">* Document number:</label><br />
@@ -64,11 +64,11 @@
                         </div>
                         <div class="form-group col-md-12">
                             <label for="country">Country:</label><br />
-                            <select class="form-control" data-bind="options: countries, value: patient.country" id="country" name="state"></select>
+                            <select class="form-control modified-select" data-bind="options: countries, value: patient.country" id="country" name="state"></select>
                         </div>
                         <div class="form-group col-md-12">
                             <label for="city">City:</label><br />
-                            <select class="form-control" data-bind="options: cities, value: patient.city" id="city" name="state"></select>
+                            <select class="form-control modified-select" data-bind="options: cities, value: patient.city" id="city" name="state"></select>
                         </div>
                     </form>
                 </div>
