@@ -14,10 +14,11 @@ namespace Backend.Domain.Entities
         public string phoneNumber { get; set; }
         public string email { get; set; }
         public DateTime birthdate { get; set; }
+        public DateTime creationDate { get; set; }
         public string country { get; set; }
         public string city { get; set; }
 
-        public Patient(string name, string lastname, string documentType, string documentNumber, string phoneNumber, string email, DateTime birthdate, string country, string city)
+        public Patient(string name, string lastname, string documentType, string documentNumber, string phoneNumber, string email, DateTime birthdate, DateTime creationDate, string country, string city)
         {
             this.name = name;
             this.lastname = lastname;
@@ -26,6 +27,7 @@ namespace Backend.Domain.Entities
             this.phoneNumber = phoneNumber;
             this.email = email;
             this.birthdate = birthdate;
+            this.creationDate = creationDate;
             this.country = country;
             this.city = city;
         }

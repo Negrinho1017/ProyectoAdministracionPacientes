@@ -21,6 +21,7 @@ namespace Backend.Persistence.Builder
             patient.documentType = patientEntity.documentType;
             patient.email = patientEntity.email;
             patient.phoneNumber = patientEntity.phoneNumber;
+            patient.creationDate = patientEntity.creationDate;
             return patient;
         }
 
@@ -36,6 +37,7 @@ namespace Backend.Persistence.Builder
             patientEntity.documentType = patient.documentType;
             patientEntity.email = patient.email;
             patientEntity.phoneNumber = patient.phoneNumber;
+            patientEntity.creationDate = patient.creationDate;
             return patientEntity;
         }
 
