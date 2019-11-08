@@ -48,15 +48,18 @@
                         </div>
                         <div class="form-group col-md-12">
                             <label for="documentNumber">* Document number:</label><br />
-                            <input type="text" class="form-control" placeholder="Document number" id="documentNumber" data-bind='value: patient.documentNumber, disable: edit' />
+                            <input type="text" class="form-control" placeholder="Document number" id="documentNumber" data-bind='value: patient.documentNumber, disable: edit' 
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" />
                         </div>
                         <div class="form-group col-md-12">
                             <label for="phoneNumber">* Phone number:</label><br />
-                            <input type="text" class="form-control" placeholder="Phone number" id="phoneNumber" data-bind='value: patient.phoneNumber' />
+                            <input type="text" class="form-control" placeholder="Phone number" id="phoneNumber" data-bind='value: patient.phoneNumber'
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" />
                         </div>
                         <div class="form-group col-md-12">
                             <label for="email">E-mail:</label><br />
-                            <input type="text" class="form-control" placeholder="E-mail" id="email" data-bind='value: patient.email' />
+                            <input type="text" class="form-control" placeholder="E-mail" id="email" data-bind='value: patient.email' 
+                                oninput="this.value = this.value.replace(/[^0-9a-zA-Z]+@[^0-9a-zA-Z]+.[^a-zA-Z]+/g, '').replace(/(\..*)\./g, '$1');" />
                         </div>
                         <div class="form-group col-md-12">
                             <label for="birthdate">* Birthdate:</label><br />

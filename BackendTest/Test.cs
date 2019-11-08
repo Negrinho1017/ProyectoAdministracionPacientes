@@ -40,7 +40,7 @@ namespace BackendTest
         }
 
         [Fact]
-        public void getNumberOfPatientsPerMonth()
+        public void getPatientsPerMonth()
         {
             PatientManager patientManager = new PatientManager();
             Patient p1 = new Patient();
@@ -55,18 +55,7 @@ namespace BackendTest
             p5.creationDate = DateTime.Parse("2002-08-12");
             List<Patient> patients = new List<Patient>();
             ListUtil.AddMany(patients, p1, p2, p3, p4, p5);
-            Assert.Equal(0, patientManager.getNumberOfPatientsPerMonth(patients)[0]);
-            Assert.Equal(0, patientManager.getNumberOfPatientsPerMonth(patients)[1]);
-            Assert.Equal(0, patientManager.getNumberOfPatientsPerMonth(patients)[2]);
-            Assert.Equal(0, patientManager.getNumberOfPatientsPerMonth(patients)[3]);
-            Assert.Equal(0, patientManager.getNumberOfPatientsPerMonth(patients)[4]);
-            Assert.Equal(0, patientManager.getNumberOfPatientsPerMonth(patients)[5]);
-            Assert.Equal(0, patientManager.getNumberOfPatientsPerMonth(patients)[6]);
-            Assert.Equal(2, patientManager.getNumberOfPatientsPerMonth(patients)[7]);
-            Assert.Equal(0, patientManager.getNumberOfPatientsPerMonth(patients)[8]);
-            Assert.Equal(0, patientManager.getNumberOfPatientsPerMonth(patients)[9]);
-            Assert.Equal(0, patientManager.getNumberOfPatientsPerMonth(patients)[10]);
-            Assert.Equal(3, patientManager.getNumberOfPatientsPerMonth(patients)[11]);
+            Assert.Equal(12, patientManager.getPatientsPerMonth(patients).Count);
         }
     }
 }

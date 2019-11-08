@@ -61,6 +61,7 @@ var KO = function () {
     this.cancel = function () {
         this.edit = ko.mapping.fromJS(false, this.edit);
         this.patient = ko.mapping.fromJS(emptyPatient, this.patient);
+        $(`#email`).removeClass("required");
         for (var fieldIndex in fields) {
             field = fields[fieldIndex];
             $(`#${field}`).removeClass("required");
@@ -69,7 +70,6 @@ var KO = function () {
     }
 
     this.createPatient = function () {
-        console.log(ko.toJSON(this.patient.country));
         if (self.validFields()) {
             const newPatient = JSON.parse(ko.toJSON(this.patient))
             httpPost(newPatient);
@@ -78,8 +78,6 @@ var KO = function () {
             successMessage("Patient created!!");
             patients = httpGet();
             getPatients();
-        } else {
-            Swal.fire("You must fill all (*) fields");
         }
     }
 
@@ -106,8 +104,20 @@ var KO = function () {
         this.patient.documentType = documentType;
     }
 
+    self.validateEmail = function () {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        email = document.getElementById("email").value;
+        return email !== "" ? re.test(String(email).toLowerCase()) : true;
+    }
+
     self.validFields = function () {
         var allFieldsFilled = true;
+        if (!self.validateEmail()) {
+            $(`#email`).addClass("required");
+            Swal.fire("You did not write a correct email");
+            return false;
+        }
+        $(`#email`).removeClass("required");
         for (var fieldIndex in fields) {
             field = fields[fieldIndex];
             element = document.getElementById(fields[fieldIndex]).value;
@@ -117,6 +127,9 @@ var KO = function () {
             } else {
                 $(`#${field}`).removeClass("required");
             }
+        }
+        if (!allFieldsFilled) {
+            Swal.fire("You must fill all (*) fields");
         }
         return allFieldsFilled;
     }

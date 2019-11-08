@@ -9,42 +9,44 @@ var KO = function () {
         self.patients = ko.mapping.fromJS(true, self.patients);
         beginDate = ko.toJS(self.beginDate);
         endDate = ko.toJS(self.endDate);
+        people = httpGetPatientsPerMonth(beginDate, endDate);
+        console.log(people);
         peoplePerMonth = [{
             arg: "Enero",
-            val: httpGetPatientsPerMonth(beginDate, endDate)[0]
+            val: people[0].length
         }, {
             arg: "Febrero",
-            val: httpGetPatientsPerMonth(beginDate, endDate)[1]
+            val: people[1].length
         }, {
             arg: "Marzo",
-            val: httpGetPatientsPerMonth(beginDate, endDate)[2]
+            val: people[2].length
         }, {
             arg: "Abril",
-            val: httpGetPatientsPerMonth(beginDate, endDate)[3]
+            val: people[3].length
         }, {
             arg: "Mayo",
-            val: httpGetPatientsPerMonth(beginDate, endDate)[4]
+            val: people[4].length
         }, {
             arg: "Junio",
-            val: httpGetPatientsPerMonth(beginDate, endDate)[5]
+            val: people[5].length
         }, {
             arg: "Julio",
-            val: httpGetPatientsPerMonth(beginDate, endDate)[6]
+            val: people[6].length
         }, {
             arg: "Agosto",
-            val: httpGetPatientsPerMonth(beginDate, endDate)[7]
+            val: people[7].length
         }, {
             arg: "Septiembre",
-            val: httpGetPatientsPerMonth(beginDate, endDate)[8]
+            val: people[8].length
         }, {
             arg: "Octubre",
-            val: httpGetPatientsPerMonth(beginDate, endDate)[9]
+            val: people[9].length
         }, {
             arg: "Noviembre",
-            val: httpGetPatientsPerMonth(beginDate, endDate)[10]
+            val: people[10].length
         }, {
             arg: "Diciembre",
-            val: httpGetPatientsPerMonth(beginDate, endDate)[11]
+            val: people[11].length
         }];
         getGraph();
     }

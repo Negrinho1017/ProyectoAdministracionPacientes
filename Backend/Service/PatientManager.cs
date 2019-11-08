@@ -23,13 +23,13 @@ namespace Backend.Service
             return patientRepository.List();
         }
 
-        public List<int> getPatientsPerDate(string beginDate, string endDate)
+        public List<List<Patient>> getPatientsPerDate(string beginDate, string endDate)
         {
             DateTime beginDateParsed = DateTime.Parse(beginDate);
             DateTime endDateParsed = DateTime.Parse(endDate);
             List<Patient> patients = new List<Patient>(patientRepository.List());
             List<Patient> patientsBetweenTwoDates = getPatientsCreatedBetweenTwoDates(patients, beginDateParsed, endDateParsed);
-            return getNumberOfPatientsPerMonth(patientsBetweenTwoDates);
+            return getPatientsPerMonth(patientsBetweenTwoDates);
         }
 
         public List<Patient> getPatientsCreatedBetweenTwoDates(List<Patient> patients, DateTime beginDate, DateTime endDate)
@@ -44,13 +44,13 @@ namespace Backend.Service
             return patientsCreatedInTheTwoDates;
         }
 
-        public List<int> getNumberOfPatientsPerMonth(List<Patient> patients)
+        public List<List<Patient>> getPatientsPerMonth(List<Patient> patients)
         {
-            List<int> monthsInPatientList = new List<int>(patients.Select(p => p.creationDate.Month));
-            List<int> patientsPerMonth = new List<int>();
+            List<Patient> monthsInPatientList = new List<Patient>(patients.Where(p => p.creationDate.Month == 1));
+            List<List<Patient>> patientsPerMonth = new List<List<Patient>>();
             Enumerable.Range(0, 12).ToList()
                 .ForEach(e => patientsPerMonth
-                .Add(monthsInPatientList.Where(m => m == e + 1).Count()));
+                .Add(new List<Patient>(patients.Where(p => p.creationDate.Month == e + 1))));
             return patientsPerMonth;
         }
 

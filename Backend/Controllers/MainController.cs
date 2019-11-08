@@ -26,7 +26,7 @@ namespace Backend.Controllers
         }
 
         [HttpGet("betweenDates")]
-        public IEnumerable<int> Get(string beginDate, string endDate)
+        public IEnumerable<List<Patient>> Get(string beginDate, string endDate)
         {
             return patientManager.getPatientsPerDate(beginDate, endDate);
         }
