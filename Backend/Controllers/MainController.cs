@@ -25,6 +25,12 @@ namespace Backend.Controllers
             return patientManager.getAllPatients();
         }
 
+        [HttpGet("betweenDates")]
+        public IEnumerable<int> Get(string beginDate, string endDate)
+        {
+            return patientManager.getPatientsPerDate(beginDate, endDate);
+        }
+
         [HttpGet("{documentNumber}")]
         public Patient Get(string documentNumber)
         {

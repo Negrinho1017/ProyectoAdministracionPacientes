@@ -1,4 +1,5 @@
 ﻿using Backend.Domain.Entities;
+using Backend.Domain.Util;
 using Backend.Persistence.Repository.Interface;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,37 @@ namespace Backend.Service
                 patientRepository.Add(new Patient("John", "Dale", "CE", "3", "170039933", "john.dale@yahoo.com", new DateTime(1990, 1, 30), "Estados Unidos", "Utah"));
             }
             return patientRepository.List();
+        }
+
+        public List<int> getPatientsPerDate(string beginDate, string endDate)
+        {
+            DateTime beginDateParsed = DateTime.Parse(beginDate);
+            DateTime endDateParsed = DateTime.Parse(endDate);
+            List<Patient> patients = new List<Patient>(patientRepository.List());
+            List<Patient> patientsBetweenTwoDates = getPatientsCreatedBetweenTwoDates(patients, beginDateParsed, endDateParsed);
+            return getNumberOfPatientsPerMonth(patientsBetweenTwoDates);
+        }
+
+        public List<Patient> getPatientsCreatedBetweenTwoDates(List<Patient> patients, DateTime beginDate, DateTime endDate)
+        {
+            List<Patient> patientsCreatedInTheTwoDates = new List<Patient>();
+            patients.ForEach(patient => {
+                if (DateUtil.betweenTwoDates(patient.creationDate, beginDate, endDate))
+                {
+                    patientsCreatedInTheTwoDates.Add(patient);
+                }
+            });
+            return patientsCreatedInTheTwoDates;
+        }
+
+        public List<int> getNumberOfPatientsPerMonth(List<Patient> patients)
+        {
+            List<int> monthsInPatientList = new List<int>(patients.Select(p => p.creationDate.Month));
+            List<int> patientsPerMonth = new List<int>();
+            Enumerable.Range(0, 12).ToList()
+                .ForEach(e => patientsPerMonth
+                .Add(monthsInPatientList.Where(m => m == e + 1).Count()));
+            return patientsPerMonth;
         }
 
         public Patient getPatientByDocumentNumber(string documentNumber)
