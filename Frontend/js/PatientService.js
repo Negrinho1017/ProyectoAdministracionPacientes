@@ -6,6 +6,14 @@
     }).responseText);
 }
 
+function httpGetPatientsPerMonth(beginDate, endDate) {
+    return JSON.parse($.ajax({
+        type: "GET",
+        url: url + `/betweenDates?beginDate=${beginDate}&endDate=${endDate}`,
+        async: false
+    }).responseText);
+}
+
 function httpGetById(id) {
     return JSON.parse($.ajax({
         type: "GET",
