@@ -42,7 +42,7 @@
             </Scripts>
         </asp:ScriptManager>
 
-        <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar navbar-default navbar-fixed-top ">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -54,9 +54,9 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a runat="server" href="~/">Inicio</a></li>
-                        <li><a runat="server" href="~/Patients">Patients</a></li>
-                        <li><a runat="server" href="~/PatientsReport">Patients report</a></li>
+                        <li><a runat="server" style="color: inherit" href="~/">Home</a></li>
+                        <li><a runat="server" style="color: inherit" href="~/Patients">Patients</a></li>
+                        <li><a runat="server" style="color: inherit" href="~/PatientsReport">Patients report</a></li>
                     </ul>
                 </div>
             </div>
@@ -69,5 +69,17 @@
             </footer>
         </div>
     </form>
+    <script>
+        $('ul').on('mouseover', 'li', function () {
+            $('li.selected').removeClass('selected');
+            $(this).addClass('selected');
+        });
+    </script>
+    <style>
+        .selected {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
 </body>
 </html>
