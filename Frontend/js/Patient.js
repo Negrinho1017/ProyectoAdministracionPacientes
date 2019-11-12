@@ -14,7 +14,6 @@ var emptyPatient = {
 var fields = ["name", "lastname", "documentType", "documentNumber", "phoneNumber", "birthdate"];
 
 var KO = function () {
-    console.log(httpGet());
     this.countries = ko.mapping.fromJS(country_arr);
     this.cities = ko.mapping.fromJS([]);
     this.documentTypes = ko.mapping.fromJS(["CC", "CE", "TI"]);

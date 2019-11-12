@@ -5,10 +5,19 @@ var KO = function () {
     self.beginDate = ko.observable("");
     self.endDate = ko.observable("");
     self.month = ko.observable("");
+
+    self.invalidDate = function (date) {
+        return date === "";
+    }
+
     self.filterPatients = function () {
         self.patients = ko.mapping.fromJS(true, self.patients);
         beginDate = ko.toJS(self.beginDate);
         endDate = ko.toJS(self.endDate);
+        if (self.invalidDate(beginDate) || self.invalidDate(endDate)) {
+            Swal.fire("You must fill the date fields");
+            return;
+        }
         people = httpGetPatientsPerMonth(beginDate, endDate);
         peoplePerMonth = [{
             arg: "January",
@@ -54,6 +63,38 @@ var KO = function () {
         getGraph();
     });
 
+    function getPatientsPerMonth(index) {
+        $("#gridContainer").dxDataGrid({
+            dataSource: people[index],
+            filterRow: {
+                visible: true
+            },
+            paging: {
+                pageSize: 2
+            },
+            pager: {
+                showPageSizeSelector: true,
+                allowedPageSizes: [2, 4, 6]
+            },
+            columns: [
+                {
+                    caption: "Name",
+                    dataField: "name",
+                }, {
+                    dataField: "lastname",
+                    caption: "Lastname",
+                }, {
+                    dataField: "phoneNumber",
+                    caption: "Phone number",
+                }, {
+                    dataField: "email",
+                    caption: "Email",
+                }
+            ],
+            showBorders: true
+        });
+    }
+
     function getGraph() {
         $("#chart").dxChart({
             dataSource: peoplePerMonth,
@@ -75,13 +116,7 @@ var KO = function () {
             onPointClick: function (e) {
                 index = e.target.index;
                 self.month(e.target.argument);
-                $(function () {
-                    $("#gridContainer").dxDataGrid({
-                        dataSource: people[index],
-                        columns: ["name", "lastname", "phoneNumber", "email"],
-                        showBorders: true
-                    });
-                });
+                getPatientsPerMonth(index);
                 $('#modalPeoplePerMonth').modal('show');
             },
             tooltip: {
@@ -91,6 +126,5 @@ var KO = function () {
         });
     }
 }
-
 
 ko.applyBindings(new KO());
