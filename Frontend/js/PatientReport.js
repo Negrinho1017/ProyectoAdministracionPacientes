@@ -122,7 +122,7 @@ var KO = function () {
             tooltip: {
                 enabled: true
             },
-            title: "Patients registered"
+            title: `Patients registered between ${ko.toJS(self.beginDate)} and ${ko.toJS(self.endDate)}`
         });
     }
 }
