@@ -4,48 +4,47 @@ var KO = function () {
     self.patients = ko.mapping.fromJS(false);
     self.beginDate = ko.observable("");
     self.endDate = ko.observable("");
-
+    self.month = ko.observable("");
     self.filterPatients = function () {
         self.patients = ko.mapping.fromJS(true, self.patients);
         beginDate = ko.toJS(self.beginDate);
         endDate = ko.toJS(self.endDate);
         people = httpGetPatientsPerMonth(beginDate, endDate);
-        console.log(people);
         peoplePerMonth = [{
-            arg: "Enero",
+            arg: "January",
             val: people[0].length
         }, {
-            arg: "Febrero",
+            arg: "February",
             val: people[1].length
         }, {
-            arg: "Marzo",
+            arg: "March",
             val: people[2].length
         }, {
-            arg: "Abril",
+            arg: "April",
             val: people[3].length
         }, {
-            arg: "Mayo",
+            arg: "May",
             val: people[4].length
         }, {
-            arg: "Junio",
+            arg: "June",
             val: people[5].length
         }, {
-            arg: "Julio",
+            arg: "July",
             val: people[6].length
         }, {
-            arg: "Agosto",
+            arg: "August",
             val: people[7].length
         }, {
-            arg: "Septiembre",
+            arg: "September",
             val: people[8].length
         }, {
-            arg: "Octubre",
+            arg: "October",
             val: people[9].length
         }, {
-            arg: "Noviembre",
+            arg: "November",
             val: people[10].length
         }, {
-            arg: "Diciembre",
+            arg: "December",
             val: people[11].length
         }];
         getGraph();
@@ -62,7 +61,8 @@ var KO = function () {
                 visible: false
             },
             series: {
-                type: "bar"
+                type: "bar",
+                color: "#49DF62",
             },
             argumentAxis: {
                 tickInterval: 10,
@@ -71,6 +71,18 @@ var KO = function () {
                         type: "decimal"
                     }
                 }
+            },
+            onPointClick: function (e) {
+                index = e.target.index;
+                self.month(e.target.argument);
+                $(function () {
+                    $("#gridContainer").dxDataGrid({
+                        dataSource: people[index],
+                        columns: ["name", "lastname", "phoneNumber", "email"],
+                        showBorders: true
+                    });
+                });
+                $('#modalPeoplePerMonth').modal('show');
             },
             tooltip: {
                 enabled: true
