@@ -16,8 +16,6 @@ var fields = ["name", "lastname", "documentType", "documentNumber", "phoneNumber
 var KO = function () {
     this.selectedCountry = ko.observable();
     this.countries = ko.mapping.fromJS(countryArray);
-    //this.abc.push(countryArray);
-    //this.countries = ko.mapping.fromJS(country_arr);
     this.cities = ko.mapping.fromJS([]);
     this.documentTypes = ko.mapping.fromJS(["CC", "CE", "TI"]);
     this.patient = ko.mapping.fromJS(emptyPatient);
