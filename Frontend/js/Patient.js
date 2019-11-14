@@ -14,12 +14,14 @@ var emptyPatient = {
 var fields = ["name", "lastname", "documentType", "documentNumber", "phoneNumber", "birthdate"];
 
 var KO = function () {
-    this.countries = ko.mapping.fromJS(country_arr);
+    this.selectedCountry = ko.observable();
+    this.countries = ko.mapping.fromJS(countryArray);
+    //this.abc.push(countryArray);
+    //this.countries = ko.mapping.fromJS(country_arr);
     this.cities = ko.mapping.fromJS([]);
     this.documentTypes = ko.mapping.fromJS(["CC", "CE", "TI"]);
     this.patient = ko.mapping.fromJS(emptyPatient);
     this.edit = ko.mapping.fromJS(false);
-    this.countrySelected = ko.mapping.fromJS(false);
     var self = this
 
     $("#gridContainer").on("click", ".delete", function () {
@@ -42,9 +44,9 @@ var KO = function () {
         },
     });
 
-    $('#country').change(function () {
-        var citiesIndex = (country_arr.indexOf(($(this).val())));
-        self.getCities(s_a[citiesIndex + 1].split("|"), citiesIndex);
+    $("#countryInput").on('input', function () {
+        var country = this.value;
+        self.getCities(self.findCities(country));
     });
 
     $('#city').change(function () {
@@ -58,6 +60,7 @@ var KO = function () {
     });
 
     this.cancel = function () {
+        self.restartValues();
         this.edit = ko.mapping.fromJS(false, this.edit);
         this.patient = ko.mapping.fromJS(emptyPatient, this.patient);
         $(`#email`).removeClass("required");
@@ -77,6 +80,7 @@ var KO = function () {
             successMessage("Patient created!!");
             patients = httpGet();
             getPatients();
+            self.restartValues();
         }
     }
 
@@ -90,17 +94,43 @@ var KO = function () {
             this.edit = ko.mapping.fromJS(false, this.edit);
             this.patient = ko.mapping.fromJS(emptyPatient, this.patient);
             $('#patientForm').modal('hide');
+            self.restartValues();
         } else {
             Swal.fire("You must fill all (*) fields");
         }
     }
 
+    self.findCities = function (country) {
+        if (self.findCountryElements(country) !== undefined) {
+            console
+            return self.findCountryElements(country).states;
+        }
+        return [];
+    }
+
+    self.findCountryElements = function (country) {
+        return countryArray.filter(
+            function (countryArray) {
+                return countryArray.country == country
+            }
+        )[0];
+    }
+
+    self.restartValues = function () {
+        this.cities = ko.mapping.fromJS([], this.cities);
+        this.countries = ko.mapping.fromJS(countryArray);
+    }
+
     self.assignCity = function (city) {
-        this.patient.city = city;
+        this.patient.city(city);
+    }
+
+    self.assignCountry = function (country) {
+        this.patient.country(country);
     }
 
     self.assignDocumentType = function (documentType) {
-        this.patient.documentType = documentType;
+        this.patient.documentType(documentType);
     }
 
     self.validateEmail = function () {
@@ -133,9 +163,7 @@ var KO = function () {
         return allFieldsFilled;
     }
 
-    self.getCities = function (cities, country) {
-        this.patient.country = country_arr[country];
-        this.countrySelected = ko.mapping.fromJS(true, this.countrySelected);
+    self.getCities = function (cities) {
         this.cities = ko.mapping.fromJS(cities, this.cities);
     }
 
@@ -156,6 +184,13 @@ var KO = function () {
         this.documentNumber = httpGetById(documentNumber).documentNumber;
         gottenPatient = httpGetById(documentNumber);
         gottenPatient.birthdate = self.parseDate(gottenPatient.birthdate);
+        this.patient.documentType(gottenPatient.documentType);
+
+        self.getCities(self.findCities(gottenPatient.country));
+
+        this.patient.country(gottenPatient.country);
+        this.patient.city(gottenPatient.city);
+
         this.patient = ko.mapping.fromJS(gottenPatient, this.patient);
     }
 
@@ -168,6 +203,11 @@ var KO = function () {
     });
 
     function getPatients() {
+        patients = patients.map(function (patient) {
+            patient.birthdate = self.parseDate(patient.birthdate);
+            return patient 
+        });
+
         $("#gridContainer").dxDataGrid({
             showBorders: true,
             dataSource: patients,
@@ -221,11 +261,7 @@ var KO = function () {
             },
             {
                 caption: "Birthdate",
-                cellTemplate: function (container, options) {
-                    container.addClass("chart-cell");
-                    var birthdate = self.parseDate(options.data.birthdate);
-                    container.append(birthdate);
-                }
+                dataField: "birthdate",
             },
             {
                 dataField: "country",
@@ -240,3 +276,6 @@ var KO = function () {
 }
 
 ko.applyBindings(new KO());
+
+
+  

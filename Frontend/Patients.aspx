@@ -63,15 +63,25 @@
                         </div>
                         <div class="form-group col-md-12">
                             <label for="birthdate">* Birthdate:</label><br />
-                            <input type="date" class="form-control" placeholder="Birthdate" id="birthdate" data-bind='value: patient.birthdate' />
+                            <input type="date" class="form-control" id="birthdate" data-bind='value: patient.birthdate' />
                         </div>
+
                         <div class="form-group col-md-12">
-                            <label for="country">Country:</label><br />
-                            <select class="form-control modified-select" data-bind="options: countries, value: patient.country" id="country" name="state"></select>
+                            <label for="countryInput">Country:</label>
+
+                            <input class="form-control" placeholder="Select country..." id="countryInput"
+                                type="text"
+                                data-bind="value: patient.country"
+                                list="countryList" />
+
+                            <datalist id="countryList" data-bind="foreach: countries">
+                                <option data-bind="value: country"></option>
+                            </datalist>
                         </div>
+
                         <div class="form-group col-md-12">
                             <label for="city">City:</label><br />
-                            <select class="form-control modified-select" data-bind="options: cities, value: patient.city" id="city" name="state"></select>
+                            <select class="form-control modified-select" data-bind="options: cities, value: patient.city" id="city"></select>
                         </div>
                     </form>
                 </div>
@@ -85,6 +95,7 @@
             </div>
         </div>
     </div>
+
     <script type="text/javascript" src="js/NotificationService.js"></script>
     <script type="text/javascript" src="js/countries.js"></script>
     <script type="text/javascript" src="js/PatientService.js"></script>
